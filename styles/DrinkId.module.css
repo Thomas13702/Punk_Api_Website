@@ -1,0 +1,46 @@
+.heading {
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
+  grid-template-rows: repeat(4 1fr);
+  grid-gap: 1rem;
+}
+
+.profileImage {
+  position: relative;
+  height: 300px;
+  width: 100%;
+
+  /* background-color: red; */
+}
+
+.data {
+  grid-column: 2;
+  grid-row: 1;
+  /* background-color: yellow; */
+}
+
+.foodPairing {
+  /* background-color: blue; */
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+}
+
+.ingredients {
+  /* background-color: green; */
+  grid-column: 2;
+  grid-row: 2;
+}
+
+@media (max-width: 900px) {
+  .body {
+    display: flex;
+    flex-direction: column;
+    /* background-color: aqua; */
+  }
+}
