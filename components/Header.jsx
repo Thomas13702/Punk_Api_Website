@@ -2,12 +2,29 @@ import styles from "@/styles/Navbar.module.scss";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
+import { getAuth, signOut } from "firebase/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 
 //const headings = { prop1: "account", prop2: "Logout" };
 
-export default function NavBar() {
+export default function NavBar({ uid }) {
+  const router = useRouter();
+  const logout = async () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        router.push("/");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
   return (
     <nav className={styles.nav}>
+      <ToastContainer />
       <div className={styles.width}>
         <input
           type="checkbox"
@@ -48,6 +65,24 @@ export default function NavBar() {
               </a>
             </Link>
           </li>
+          {!uid ? (
+            <>
+              <li>
+                <Link href="/authenticate/login">
+                  <a className={styles.a}>Login</a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/authenticate/register">
+                  <a className={styles.a}>Register</a>
+                </Link>
+              </li>
+            </>
+          ) : (
+            <li className={styles.logout}>
+              <a onClick={logout}>Logout</a>
+            </li>
+          )}
         </ul>
       </div>
     </nav>
