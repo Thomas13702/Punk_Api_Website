@@ -59,7 +59,7 @@ export default function NavBar({ uid }) {
             </Link>
           </li>
           <li>
-            <Link href="/authenticated/home">
+            <Link href="/favourites">
               <a className={styles.a}>
                 Favourites <FaRegStar />
               </a>

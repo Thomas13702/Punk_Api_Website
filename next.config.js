@@ -17,5 +17,6 @@ module.exports = {
     appId: process.env.appId,
     measurementId: process.env.measurementId,
     databaseURL: process.env.databaseURL,
+    mongodburl: process.env.mongodburl,
   },
 };

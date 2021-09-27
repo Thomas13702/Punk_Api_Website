@@ -22,8 +22,9 @@ export async function getServerSideProps(context) {
   try {
     let uid1 = null;
     const cookies = nookies.get(context);
-    // console.log(cookies.token !== "");
-    if (cookies.token !== "") {
+    console.log(cookies.token);
+
+    if (cookies.token !== "" && cookies.token !== undefined) {
       const token = await verifyIdToken(cookies.token);
       // console.log(cookies.token);
       const { uid, email } = token;
