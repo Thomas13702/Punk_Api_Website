@@ -9,11 +9,10 @@ import Favourite from "../../models/favourite";
 const handler = async (req, res) => {
   if (req.method === "POST") {
     try {
-      // console.log(req.headers.cookie.split("=")[1]);
-      const cookies = req.headers.cookie.split("=")[1];
-      console.log(cookies);
+      // console.log(req.headers.cookie.split("token=")[1]);
+      const cookies = req.headers.cookie.split("token=")[1];
+      //console.log(cookies);
       if (cookies === "" && cookies === undefined) {
-        console.log("403");
         res.status(403).json({
           message: "Please Sign in or Register to add to favourites!",
         });
@@ -23,14 +22,20 @@ const handler = async (req, res) => {
 
       const { uid } = token;
 
+      console.log(typeof uid);
+      console.log(uid);
+      console.log(typeof req.body.favourite);
+      console.log(req.body.favourite);
+
       const newFavourite = new Favourite({
         favourite: req.body.favourite,
         user: uid,
       });
 
-      const favourite = await newFavourite.save();
+      const favouriteRes = await newFavourite.save();
 
-      res.json(favourite);
+      res.json(favouriteRes);
+      console.log(favouriteRes);
     } catch (err) {
       console.log(err);
       res.status(500).send("Server Error");

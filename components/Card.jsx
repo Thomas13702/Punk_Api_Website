@@ -18,13 +18,13 @@ export default function Card({ data }) {
         "Content-Type": "application/json",
         // Authorization: cookies,
       },
-      body: JSON.stringify({
-        favourite: data.id,
-      }),
+      body: JSON.stringify({ favourite: data.id.toString() }),
     });
 
+    console.log(res);
+
     if (!res.ok) {
-      console.log(res);
+      // console.log(res);
       if (res.status === 403 || res.status === 401) {
         toast.error("Please Login or Register to add to favourites");
         return;

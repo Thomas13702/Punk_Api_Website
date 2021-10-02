@@ -11,7 +11,7 @@ export default function Layout({
   children,
   uid,
 }) {
-  console.log("1" + uid);
+  // console.log("1" + uid);
   return (
     <div>
       <Head>

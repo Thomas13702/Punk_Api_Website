@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "@/styles/DrinkId.module.css";
 
 export default function DrinkID({ data }) {
-  console.log(data[0]);
+  // console.log(data[0]);
 
   return (
     <Layout>

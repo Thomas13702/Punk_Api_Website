@@ -1,19 +1,22 @@
 import mongoose from "mongoose";
 var Schema = mongoose.Schema;
 
-var favourite = new Schema({
+var FavouriteSchema = new Schema({
   favourite: {
-    id: Number,
+    type: String,
     // required: true,
   },
   user: {
-    id: String,
+    type: String,
     // required: true,
   },
 });
 
 mongoose.models = {};
 
-var Favourite = mongoose.model("Favourite", favourite);
+var Favourite = mongoose.model("favourite", FavouriteSchema);
 
 export default Favourite;
+
+// module.exports =
+// mongoose.models.favourite || mongoose.model("favourite", FavouriteSchema);
