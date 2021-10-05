@@ -14,7 +14,7 @@ var FavouriteSchema = new Schema({
 
 mongoose.models = {};
 
-var Favourite = mongoose.model("favourite", FavouriteSchema);
+var Favourite = mongoose.model("Favourite", FavouriteSchema, "favourites");
 
 export default Favourite;
 

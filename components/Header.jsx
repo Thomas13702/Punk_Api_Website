@@ -21,6 +21,7 @@ export default function NavBar({ uid }) {
         toast.error(error.message);
       });
   };
+  console.log("This is a uid " + uid);
 
   return (
     <nav className={styles.nav}>

@@ -1,6 +1,4 @@
-import nookies from "nookies";
 import { verifyIdToken } from "../../firebaseAdmin";
-import firebaseClient from "../../firebaseClient";
 
 import connectDB from "../../middleware/mongodb";
 
@@ -22,10 +20,10 @@ const handler = async (req, res) => {
 
       const { uid } = token;
 
-      console.log(typeof uid);
-      console.log(uid);
-      console.log(typeof req.body.favourite);
-      console.log(req.body.favourite);
+      // console.log(typeof uid);
+      // console.log(uid);
+      // console.log(typeof req.body.favourite);
+      // console.log(req.body.favourite);
 
       const newFavourite = new Favourite({
         favourite: req.body.favourite,
