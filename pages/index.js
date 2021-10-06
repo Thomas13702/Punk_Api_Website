@@ -40,6 +40,7 @@ export async function getServerSideProps(context) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`,
         },
       });
 

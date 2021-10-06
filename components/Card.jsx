@@ -11,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Card({ data }) {
   const router = useRouter();
 
+  console.log("data: " + data);
+
   const favouriteClicked = async () => {
     const res = await fetch(`${NEXT_URL}/api/postFavourite`, {
       method: "POST",

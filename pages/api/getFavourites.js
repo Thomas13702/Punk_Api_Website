@@ -7,15 +7,28 @@ import Favourite from "../../models/favourite";
 const handler = async (req, res) => {
   if (req.method === "GET") {
     try {
-      console.log(req.headers);
-      const cookies = req.headers.cookie.split("token=")[1];
-      //console.log(cookies);
-      if (cookies === "" && cookies === undefined) {
+      // console.log(req.headers);
+      // const cookies = req.headers.cookie.split("token=")[1];
+      // //console.log(cookies);
+      // if (cookies === "" && cookies === undefined) {
+      //   res.status(403).json({
+      //     message: "Please Sign in or Register to get favourites",
+      //   });
+      //   return;
+      // }
+
+      if (
+        !req.headers.authorization &&
+        req.headers.authorization.split(" ")[0] !== "Bearer"
+      ) {
         res.status(403).json({
           message: "Please Sign in or Register to get favourites",
         });
         return;
       }
+
+      const cookies = req.headers.authorization.split(" ")[1];
+
       const token = await verifyIdToken(cookies);
 
       const { uid } = token;
