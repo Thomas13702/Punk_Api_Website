@@ -8,10 +8,16 @@ import Card from "@/components/Card";
 
 import { useEffect, useState } from "react";
 
-export default function Favourites({ session, uid1, favourites }) {
+export default function Favourites({
+  session,
+  uid1,
+  favourites,
+  favouriteIds,
+}) {
   firebaseClient();
+  const [favouriteDrinks, setFavouriteDrinks] = useState(favourites);
 
-  console.log(favourites);
+  // console.log(favourites);
 
   return (
     <Layout title="Favourites" uid={uid1}>
@@ -20,8 +26,12 @@ export default function Favourites({ session, uid1, favourites }) {
           <div>
             {favourites ? (
               <div className={styles.feed}>
-                {favourites.map((beer) => (
-                  <Card key={beer.id} data={beer[0]} />
+                {favouriteDrinks.map((beer) => (
+                  <Card
+                    key={beer.id}
+                    data={beer[0]}
+                    favouriteIds={favouriteIds}
+                  />
                 ))}
               </div>
             ) : (
@@ -44,6 +54,7 @@ export async function getServerSideProps(context) {
   try {
     let uid1 = null;
     let favourites = [];
+    let favouritesId = null;
     const cookies = nookies.get(context);
     // console.log(cookies.token !== "");
     if (cookies.token !== "" && cookies.token !== undefined) {
@@ -60,24 +71,7 @@ export async function getServerSideProps(context) {
         },
       });
 
-      const favouritesId = await userFavorites.json();
-
-      //Get beers from favouritesId
-
-      // favourites = await favouritesId.map(async (id, index) => {
-      //   const res = await fetch(
-      //     `https://api.punkapi.com/v2/beers/${id.favourite}`,
-      //     {
-      //       method: "GET",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-
-      //   const data = await res.json();
-      //   return data;
-      // });
+      favouritesId = await userFavorites.json();
 
       for (let i = 0; i < favouritesId.length; i++) {
         const res = await fetch(
@@ -95,10 +89,12 @@ export async function getServerSideProps(context) {
       }
     }
 
+    const favouriteIds = favouritesId.map((favourite) => favourite.favourite);
+
     // console.log(favourites[0]);
 
     return {
-      props: { uid1, favourites },
+      props: { uid1, favourites, favouriteIds },
     };
   } catch (err) {
     console.log(err);

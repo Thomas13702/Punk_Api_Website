@@ -8,10 +8,14 @@ import { NEXT_URL } from "@/config/index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function Card({ data }) {
+export default function Card({ data, favourite, favouriteIds }) {
   const router = useRouter();
 
-  console.log("data: " + data);
+  const [isFavourite, setIsFavourite] = useState(
+    favouriteIds.filter((id) => {
+      return id.toString() === data.id.toString();
+    }).length > 0
+  );
 
   const favouriteClicked = async () => {
     const res = await fetch(`${NEXT_URL}/api/postFavourite`, {
@@ -23,8 +27,6 @@ export default function Card({ data }) {
       body: JSON.stringify({ favourite: data.id.toString() }),
     });
 
-    console.log(res);
-
     if (!res.ok) {
       // console.log(res);
       if (res.status === 403 || res.status === 401) {
@@ -34,13 +36,13 @@ export default function Card({ data }) {
       toast.error("Something Went Wrong");
     } else {
       const data = await res.json(); //get data
+      setIsFavourite(true);
       // router.push(`/events/${evt.slug}`);
     }
   };
 
   const imagePost = () => {
     return (
-      // <Link href={`/${data.id}`}>
       <a>
         <div className={styles.imgPost}>
           <ToastContainer />
@@ -55,7 +57,9 @@ export default function Card({ data }) {
           <div className={styles.right}>
             <div>
               <div className={styles.span}>
-                <h2>{data.name}</h2>
+                <Link href={`/${data.id}`}>
+                  <h2>{data.name}</h2>
+                </Link>
                 <div className={styles.info}>
                   <p>{`${data.description.substring(0, 200).trim()}${
                     data.description.length > 200 ? "..." : ""
@@ -63,7 +67,11 @@ export default function Card({ data }) {
                   <div className={styles.data}>
                     <p>abv: {data.abv}</p>
                     <div className={styles.star} onClick={favouriteClicked}>
-                      <FaRegStar />
+                      {isFavourite ? (
+                        <FaRegStar className={styles.red} />
+                      ) : (
+                        <FaRegStar />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -72,7 +80,6 @@ export default function Card({ data }) {
           </div>
         </div>
       </a>
-      // </Link>
     );
   };
 

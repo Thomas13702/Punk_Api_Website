@@ -67,3 +67,11 @@
     text-align: center;
   }
 }
+
+.span h2:hover {
+  text-decoration: underline;
+}
+
+.red {
+  color: red;
+}

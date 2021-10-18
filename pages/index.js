@@ -6,15 +6,17 @@ import { verifyIdToken } from "../firebaseAdmin";
 import firebaseClient from "../firebaseClient";
 import { NEXT_URL } from "@/config/index";
 
-export default function Home({ data, uid1, favourites }) {
+export default function Home({ data, uid1, favouriteIds }) {
   firebaseClient();
 
-  console.log(favourites);
+  console.log(favouriteIds);
   return (
     <Layout uid={uid1}>
       <div className={styles.feed}>
         {data !== "Uh oh" ? (
-          data.map((beer) => <Card key={beer.id} data={beer} />)
+          data.map((beer) => (
+            <Card key={beer.id} data={beer} favouriteIds={favouriteIds} />
+          ))
         ) : (
           <h1>Whoops, something went wrong!</h1>
         )}
@@ -44,7 +46,8 @@ export async function getServerSideProps(context) {
         },
       });
 
-      const favourites = await userFavorites.json();
+      favourites = await userFavorites.json();
+      // console.log(favourites);
     }
 
     const res = await fetch(
@@ -59,8 +62,11 @@ export async function getServerSideProps(context) {
 
     const data = await res.json();
 
+    const favouriteIds = favourites.map((favourite) => favourite.favourite);
+    // console.log(favouriteIds);
+
     return {
-      props: { data, uid1, favourites },
+      props: { data, uid1, favouriteIds },
     };
   } catch (err) {
     console.log(err);
