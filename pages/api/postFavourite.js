@@ -5,7 +5,7 @@ import connectDB from "../../middleware/mongodb";
 import Favourite from "../../models/favourite";
 
 const handler = async (req, res) => {
-  if (req.method === "POST") {
+  if (req.method === "PUT") {
     try {
       // console.log(req.headers.cookie.split("token=")[1]);
       const cookies = req.headers.cookie.split("token=")[1];
@@ -39,7 +39,7 @@ const handler = async (req, res) => {
       res.status(500).send("Server Error");
     }
   } else {
-    res.setHeader("Allow", ["POST"]);
+    res.setHeader("Allow", ["PUT"]);
     res.status(405).json({ message: `Method ${req.method} is not allowed` });
   }
 };

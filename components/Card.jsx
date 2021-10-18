@@ -18,17 +18,22 @@ export default function Card({ data, favourite, favouriteIds }) {
   );
 
   const favouriteClicked = async () => {
-    const res = await fetch(`${NEXT_URL}/api/postFavourite`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: cookies,
-      },
-      body: JSON.stringify({ favourite: data.id.toString() }),
-    });
+    const res = await fetch(
+      isFavourite
+        ? `${NEXT_URL}/api/removeFavourite/${data.id}`
+        : `${NEXT_URL}/api/postFavourite`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: cookies,
+        },
+        body: JSON.stringify({ favourite: data.id.toString() }),
+      }
+    );
 
     if (!res.ok) {
-      // console.log(res);
+      console.log(res.status);
       if (res.status === 403 || res.status === 401) {
         toast.error("Please Login or Register to add to favourites");
         return;
@@ -36,7 +41,7 @@ export default function Card({ data, favourite, favouriteIds }) {
       toast.error("Something Went Wrong");
     } else {
       const data = await res.json(); //get data
-      setIsFavourite(true);
+      setIsFavourite(!isFavourite);
       // router.push(`/events/${evt.slug}`);
     }
   };

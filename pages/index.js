@@ -14,8 +14,13 @@ export default function Home({ data, uid1, favouriteIds }) {
     <Layout uid={uid1}>
       <div className={styles.feed}>
         {data !== "Uh oh" ? (
-          data.map((beer) => (
-            <Card key={beer.id} data={beer} favouriteIds={favouriteIds} />
+          data.map((beer, index) => (
+            <Card
+              key={beer.id}
+              data={beer}
+              favouriteIds={favouriteIds}
+              key={index}
+            />
           ))
         ) : (
           <h1>Whoops, something went wrong!</h1>
