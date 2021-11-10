@@ -1,12 +1,17 @@
 import Layout from "@/components/Layout";
 import Image from "next/image";
 import styles from "@/styles/DrinkId.module.css";
+import nookies from "nookies";
+import { verifyIdToken } from "../firebaseAdmin";
+import firebaseClient from "../firebaseClient";
 
-export default function DrinkID({ data }) {
+export default function DrinkID({ data, uid1 }) {
+  firebaseClient();
+
   // console.log(data[0]);
 
   return (
-    <Layout>
+    <Layout uid={uid1}>
       <div className={styles.heading}>
         <h1>{data[0].name}</h1>
         <h4>{data[0].tagline}</h4>
@@ -14,12 +19,21 @@ export default function DrinkID({ data }) {
       </div>
       <div className={styles.body}>
         <div className={styles.profileImage}>
-          <Image
-            src={data[0].image_url}
-            layout="fill"
-            objectFit="contain"
-            className={styles.image}
-          />
+          {data[0].image_url ? (
+            <Image
+              src={data[0].image_url}
+              layout="fill"
+              objectFit="contain"
+              className={styles.image}
+            />
+          ) : (
+            <Image
+              src={"/images/1440777209BREWDOGLOGO.jpg"}
+              layout="fill"
+              objectFit="contain"
+              className={styles.image}
+            />
+          )}
         </div>
 
         <div className={styles.foodPairing}>
@@ -81,6 +95,16 @@ export default function DrinkID({ data }) {
 
 export async function getServerSideProps(context) {
   try {
+    let uid1 = null;
+    const cookies = nookies.get(context);
+    if (cookies.token !== "" && cookies.token !== undefined) {
+      const token = await verifyIdToken(cookies.token);
+
+      const { uid, email } = token;
+      uid1 = uid;
+      // console.log(uid1);
+    }
+
     const res = await fetch(
       `https://api.punkapi.com/v2/beers/${context.params.id}`,
       {
@@ -94,7 +118,7 @@ export async function getServerSideProps(context) {
     const data = await res.json();
 
     return {
-      props: { data },
+      props: { data, uid1 },
     };
   } catch (err) {
     return { props: { data: "Uh oh" } };
