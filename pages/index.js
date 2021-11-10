@@ -5,27 +5,54 @@ import nookies from "nookies";
 import { verifyIdToken } from "../firebaseAdmin";
 import firebaseClient from "../firebaseClient";
 import { NEXT_URL } from "@/config/index";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useState } from "react";
 
 export default function Home({ data, uid1, favouriteIds }) {
   firebaseClient();
 
-  console.log(favouriteIds);
+  const [posts, setPosts] = useState(data);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+
+  const getMorePosts = async () => {
+    setPage(page + 1);
+    const res = await fetch(
+      `https://api.punkapi.com/v2/beers?page=${page}&per_page=10`
+    );
+    const newPosts = await res.json();
+    // console.log(newPosts);
+    setPosts((posts) => [...posts, ...newPosts]);
+  };
+
   return (
     <Layout uid={uid1}>
-      <div className={styles.feed}>
-        {data !== "Uh oh" ? (
-          data.map((beer, index) => (
-            <Card
-              key={beer.id}
-              data={beer}
-              favouriteIds={favouriteIds}
-              key={index}
-            />
-          ))
-        ) : (
-          <h1>Whoops, something went wrong!</h1>
-        )}
-      </div>
+      {posts !== "Uh oh" ? (
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={getMorePosts}
+          hasMore={true}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <strong>You have reached the end!</strong>
+            </p>
+          }
+        >
+          <div className={styles.feed}>
+            {posts.map((beer, index) => (
+              <Card
+                key={beer.id}
+                data={beer}
+                favouriteIds={favouriteIds}
+                key={index}
+              />
+            ))}
+          </div>
+        </InfiniteScroll>
+      ) : (
+        <h1>Whoops, something went wrong!</h1>
+      )}
     </Layout>
   );
 }
@@ -56,7 +83,7 @@ export async function getServerSideProps(context) {
     }
 
     const res = await fetch(
-      `https://api.punkapi.com/v2/beers?page=1&per_page=50`,
+      `https://api.punkapi.com/v2/beers?page=1&per_page=10`,
       {
         method: "GET",
         headers: {

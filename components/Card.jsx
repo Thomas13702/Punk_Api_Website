@@ -52,12 +52,21 @@ export default function Card({ data, favourite, favouriteIds }) {
         <div className={styles.imgPost}>
           <ToastContainer />
           <div className={styles.profileImage}>
-            <Image
-              src={data.image_url}
-              layout="fill"
-              objectFit="contain"
-              className={styles.image}
-            />
+            {data.image_url ? (
+              <Image
+                src={data.image_url}
+                layout="fill"
+                objectFit="contain"
+                className={styles.image}
+              />
+            ) : (
+              <Image
+                src={"/images/1440777209BREWDOGLOGO.jpg"}
+                layout="fill"
+                objectFit="contain"
+                className={styles.image}
+              />
+            )}
           </div>
           <div className={styles.right}>
             <div>

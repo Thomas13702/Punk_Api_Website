@@ -5,7 +5,7 @@ import { verifyIdToken } from "../firebaseAdmin";
 import firebaseClient from "../firebaseClient";
 import { NEXT_URL } from "@/config/index";
 import Card from "@/components/Card";
-
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
 
 export default function Favourites({
